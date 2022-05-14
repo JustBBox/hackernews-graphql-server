@@ -8,6 +8,7 @@ export const Vote = objectType({
     t.nonNull.field("user", { type: "User" });
   },
 });
+import { NexusObjectTypeDef } from "nexus/dist/definitions/objectType"
 
 export const VoteMutation = extendType({
   type: "Mutation",
@@ -17,6 +18,7 @@ export const VoteMutation = extendType({
       args: {
         linkId: nonNull(intArg()),
       },
+      // @ts-ignore
       async resolve(parent, args, context) {
         const { userId } = context;
         const { linkId } = args;
@@ -44,7 +46,7 @@ export const VoteMutation = extendType({
 
         return {
           link,
-          user: user as User,
+          user
         };
       },
     });
