@@ -9,7 +9,7 @@ import {
   arg,
   list,
 } from "nexus";
-import { Prisma } from "@prisma/client";
+import { Prisma, Link as LinkType } from "@prisma/client";
 
 type LinkData = {
   description?: string;
@@ -153,16 +153,13 @@ export const LinkQuery = extendType({
         id: nonNull(intArg()),
       },
 
-      // @ts-ignore
       async resolve(parent, args, context, info) {
         const link = await context.prisma.link.findUnique({
           where: {
             id: args.id,
           },
         });
-        return {
-          link
-        }
+        return link as LinkType;
       },
     });
   },

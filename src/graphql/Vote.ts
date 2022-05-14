@@ -1,5 +1,5 @@
 import { objectType, extendType, nonNull, intArg } from "nexus";
-import { User } from "./User";
+import { User } from "@prisma/client";
 
 export const Vote = objectType({
   name: "Vote",
@@ -8,7 +8,6 @@ export const Vote = objectType({
     t.nonNull.field("user", { type: "User" });
   },
 });
-import { NexusObjectTypeDef } from "nexus/dist/definitions/objectType"
 
 export const VoteMutation = extendType({
   type: "Mutation",
@@ -18,7 +17,6 @@ export const VoteMutation = extendType({
       args: {
         linkId: nonNull(intArg()),
       },
-      // @ts-ignore
       async resolve(parent, args, context) {
         const { userId } = context;
         const { linkId } = args;
@@ -29,7 +27,7 @@ export const VoteMutation = extendType({
 
         const link = await context.prisma.link.update({
           where: {
-            id: userId,
+            id: linkId,
           },
           data: {
             voters: {
@@ -46,7 +44,7 @@ export const VoteMutation = extendType({
 
         return {
           link,
-          user
+          user: user as User,
         };
       },
     });
